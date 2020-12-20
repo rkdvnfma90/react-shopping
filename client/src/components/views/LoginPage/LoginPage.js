@@ -44,7 +44,8 @@ function LoginPage(props) {
             email: values.email,
             password: values.password,
           }
-
+          // dispatch 하는 액션 객체의 payload가 promise이면 해당 promise를 리턴 (redux-promise의 역할)
+          // response 에는 리듀서에서 리턴한 값이 들어 있다.
           dispatch(loginUser(dataToSubmit))
             .then((response) => {
               if (response.payload.loginSuccess) {

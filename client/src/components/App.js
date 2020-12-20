@@ -9,11 +9,8 @@ import NavBar from './views/NavBar/NavBar'
 import Footer from './views/Footer/Footer'
 import UploadProductPage from './views/UploadProductPage/UploadProductPage'
 
-//null   Anyone Can go inside
-//true   only logged in user can go inside
-//false  logged in user can't go inside
-
 function App() {
+  // Auth(컴포넌트) : Auth hoc로 컴포넌트를 감싼다.
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <NavBar />
