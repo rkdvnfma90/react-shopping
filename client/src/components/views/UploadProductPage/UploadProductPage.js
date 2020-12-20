@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Typography, Button, Form, Input } from 'antd'
+import FileUpload from '../../utils/FileUpload'
 
 const { TextArea } = Input
 
@@ -41,6 +42,9 @@ function UploadProductPage() {
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h2>상품 업로드</h2>
       </div>
+
+      <FileUpload />
+
       <Form>
         <br />
         <br />
