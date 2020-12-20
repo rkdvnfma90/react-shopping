@@ -37,13 +37,17 @@ function UploadProductPage() {
     setBook(event.currentTarget.value)
   }
 
+  const updateImages = (newImages) => {
+    setImages(newImages)
+  }
+
   return (
     <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
         <h2>상품 업로드</h2>
       </div>
 
-      <FileUpload />
+      <FileUpload refreshFunction={updateImages} />
 
       <Form>
         <br />
