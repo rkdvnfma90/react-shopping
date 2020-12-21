@@ -27,6 +27,11 @@ const productSchema = mongoose.Schema(
       maxlength: 100,
       default: 0,
     },
+    books: {
+      // 책들의 카테고리
+      type: Number,
+      default: 1,
+    },
     views: {
       type: Number,
       default: 0,

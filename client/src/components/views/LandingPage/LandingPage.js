@@ -4,19 +4,25 @@ import Meta from 'antd/lib/card/Meta'
 import { DingtalkOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import ImageSlider from '../../utils/ImageSlider'
+import CheckBox from './Sections/CheckBox'
+import { books } from './Sections/Datas'
 
 function LandingPage() {
   const [Products, setProducts] = useState([])
   const [Skip, setSkip] = useState(0) // 초기 값으로는 처음 데이터 부터 보여줘야 하기에 0
   const [Limit, setLimit] = useState(4) // 최대 8개씩 데이터를 가져옴
   const [PostSize, setPostSize] = useState(0)
+  const [Filters, setFilters] = useState({
+    books: [],
+    price: [],
+  })
 
   useEffect(() => {
     const body = {
       skip: Skip,
       limit: Limit,
     }
-    console.log('useEffect')
+
     getProducts(body)
   }, [])
 
@@ -60,6 +66,24 @@ function LandingPage() {
     )
   })
 
+  const showFilteredResults = (filters) => {
+    const body = {
+      skip: 0,
+      limit: Limit,
+      filters,
+    }
+
+    getProducts(body)
+    setSkip(0)
+  }
+
+  const handleFilters = (filters, category) => {
+    const newFilters = { ...Filters }
+    newFilters[category] = filters
+
+    showFilteredResults(newFilters)
+  }
+
   return (
     <div style={{ width: '75%', margin: '3rem auto' }}>
       <div style={{ textAlign: 'center' }}>
@@ -67,6 +91,16 @@ function LandingPage() {
           Yes 25 <DingtalkOutlined />
         </h2>
       </div>
+
+      {/* 체크박스 필터 영역 */}
+      <CheckBox
+        list={books}
+        handleFilters={(filters) => handleFilters(filters, 'books')}
+      />
+
+      {/* 라디오박스 필터 영역 */}
+
+      {/* 검색 영역 */}
 
       {/* gutter는 여백 */}
       <Row gutter={[16, 16]}>{renderCards}</Row>

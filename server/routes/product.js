@@ -48,9 +48,17 @@ router.post('/', (req, res) => {
 router.post('/products', (req, res) => {
   const limit = req.body.limit ? parseInt(req.body.limit) : 20
   const skip = req.body.skip ? parseInt(req.body.skip) : 0
+  let findArg = {}
+
+  for (let key in req.body.filters) {
+    // books, price 들의 필터 개수
+    if (req.body.filters[key].length > 0) {
+      findArg[key] = req.body.filters[key]
+    }
+  }
 
   // product collection에 들어 있는 모든 상품 정보를 가져오기
-  Product.find()
+  Product.find(findArg)
     .populate('writer') // 작성자에 대한 모든 정보를 가져올 수 있다.
     .skip(skip)
     .limit(limit)
