@@ -5,7 +5,8 @@ import { DingtalkOutlined } from '@ant-design/icons'
 import axios from 'axios'
 import ImageSlider from '../../utils/ImageSlider'
 import CheckBox from './Sections/CheckBox'
-import { books } from './Sections/Datas'
+import RadioBox from './Sections/RadioBox'
+import { books, price } from './Sections/Datas'
 
 function LandingPage() {
   const [Products, setProducts] = useState([])
@@ -77,11 +78,31 @@ function LandingPage() {
     setSkip(0)
   }
 
+  const handlePrice = (value) => {
+    const priceData = price
+    let priceArray = []
+
+    for (let key in priceData) {
+      if (priceData[key]._id === parseInt(value, 10)) {
+        // data[key].array 는 price 필터의 array 값이다 ([0,199] [200,249] 등등)
+        priceArray = priceData[key].array
+      }
+    }
+
+    return priceArray
+  }
+
   const handleFilters = (filters, category) => {
     const newFilters = { ...Filters }
     newFilters[category] = filters
 
+    if (category === 'price') {
+      const priceValues = handlePrice(filters)
+      newFilters[category] = priceValues
+    }
+
     showFilteredResults(newFilters)
+    setFilters(newFilters)
   }
 
   return (
@@ -92,13 +113,23 @@ function LandingPage() {
         </h2>
       </div>
 
-      {/* 체크박스 필터 영역 */}
-      <CheckBox
-        list={books}
-        handleFilters={(filters) => handleFilters(filters, 'books')}
-      />
+      <Row gutter={[16, 16]}>
+        <Col lg={12} xs={24}>
+          {/* 체크박스 필터 영역 */}
+          <CheckBox
+            list={books}
+            handleFilters={(filters) => handleFilters(filters, 'books')}
+          />
+        </Col>
 
-      {/* 라디오박스 필터 영역 */}
+        <Col lg={12} xs={24}>
+          {/* 라디오박스 필터 영역 */}
+          <RadioBox
+            list={price}
+            handleFilters={(filters) => handleFilters(filters, 'price')}
+          />
+        </Col>
+      </Row>
 
       {/* 검색 영역 */}
 

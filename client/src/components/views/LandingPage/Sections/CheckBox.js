@@ -20,7 +20,7 @@ function CheckBox({ list, handleFilters }) {
     }
 
     setChecked(newChecked)
-    handleFilters(newChecked)
+    handleFilters(newChecked) // 부모 컴포넌트에 값 전달
   }
 
   const renderCheckBoxLists = () =>
@@ -39,7 +39,7 @@ function CheckBox({ list, handleFilters }) {
   return (
     <div>
       <Collapse defaultActiveKey={['1']}>
-        <Panel header="This is panel header 1" key="1">
+        <Panel header="Category" key="1">
           {renderCheckBoxLists()}
         </Panel>
       </Collapse>

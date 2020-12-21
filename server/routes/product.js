@@ -53,7 +53,17 @@ router.post('/products', (req, res) => {
   for (let key in req.body.filters) {
     // books, price 들의 필터 개수
     if (req.body.filters[key].length > 0) {
-      findArg[key] = req.body.filters[key]
+      if (key === 'price') {
+        findArg[key] = {
+          // $gte : greater than equals
+          // $lte : less than equals
+          // 즉 price 필터에 있는 배열 ([0, 249] [250, 299])
+          $gte: req.body.filters[key][0],
+          $lte: req.body.filters[key][1],
+        }
+      } else {
+        findArg[key] = req.body.filters[key]
+      }
     }
   }
 
