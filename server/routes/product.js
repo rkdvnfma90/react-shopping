@@ -7,6 +7,7 @@ const { Product } = require('../models/Product')
 //             Product
 //=================================
 
+// https://github.com/expressjs/multer/blob/master/doc/README-ko.md multer 사용법
 const storage = multer.diskStorage({
   // 파일이 저장될 경로
   destination: function (req, file, cb) {
@@ -28,6 +29,7 @@ router.post('/image', (req, res) => {
     }
     return res.json({
       success: true,
+      // req.file.path , req.file.filename 해도 잘 가는듯
       filePath: res.req.file.path,
       fileName: res.req.file.filename,
     })
