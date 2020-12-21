@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Typography, Button, Form, Input } from 'antd'
 import FileUpload from '../../utils/FileUpload'
-import Axios from 'axios'
+import axios from 'axios'
 
 const { TextArea } = Input
 
@@ -61,7 +61,7 @@ function UploadProductPage({ user, history }) {
     }
 
     // 서버에 값들을 request 보낸다.
-    Axios.post('/api/product', body).then((response) => {
+    axios.post('/api/product', body).then((response) => {
       if (response.data.success) {
         alert('상품 업로드를 성공 했습니다.')
         history.push('/')
