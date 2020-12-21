@@ -44,7 +44,6 @@ function UploadProductPage({ user, history }) {
   }
 
   const submitHandler = (event) => {
-    console.log(event)
     event.preventDefault()
 
     if (!Title || !Description || !Price || !Book || !Images) {
