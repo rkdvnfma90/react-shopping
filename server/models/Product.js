@@ -40,6 +40,20 @@ const productSchema = mongoose.Schema(
   { timestamp: true } // 등록 시간 및 업데이트 시간 갱신됨
 )
 
+// 검색 키워드가 걸렸으면 하는 필드 설정
+productSchema.index(
+  {
+    title: 'text',
+    description: 'text',
+  },
+  {
+    weights: {
+      title: 5, // title에 가중치 5 만큼 더 중요하게 검색이 된다.
+      description: 1,
+    },
+  }
+)
+
 const Product = mongoose.model('Product', productSchema)
 
 module.exports = { Product }

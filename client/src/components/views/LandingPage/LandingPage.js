@@ -6,26 +6,30 @@ import axios from 'axios'
 import ImageSlider from '../../utils/ImageSlider'
 import CheckBox from './Sections/CheckBox'
 import RadioBox from './Sections/RadioBox'
+import SearchFeature from './Sections/SearchFeature'
 import { books, price } from './Sections/Datas'
 
 function LandingPage() {
   const [Products, setProducts] = useState([])
   const [Skip, setSkip] = useState(0) // 초기 값으로는 처음 데이터 부터 보여줘야 하기에 0
-  const [Limit, setLimit] = useState(4) // 최대 8개씩 데이터를 가져옴
+  const [Limit, setLimit] = useState(8) // 최대 8개씩 데이터를 가져옴
   const [PostSize, setPostSize] = useState(0)
   const [Filters, setFilters] = useState({
     books: [],
     price: [],
   })
+  const [SearchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     const body = {
       skip: Skip,
       limit: Limit,
+      searchTerm: SearchTerm,
+      filters: Filters,
     }
 
     getProducts(body)
-  }, [])
+  }, [SearchTerm, Filters])
 
   const getProducts = (body) => {
     axios.post('/api/product/products', body).then((response) => {
@@ -67,17 +71,6 @@ function LandingPage() {
     )
   })
 
-  const showFilteredResults = (filters) => {
-    const body = {
-      skip: 0,
-      limit: Limit,
-      filters,
-    }
-
-    getProducts(body)
-    setSkip(0)
-  }
-
   const handlePrice = (value) => {
     const priceData = price
     let priceArray = []
@@ -101,8 +94,22 @@ function LandingPage() {
       newFilters[category] = priceValues
     }
 
-    showFilteredResults(newFilters)
+    setSkip(0)
     setFilters(newFilters)
+  }
+
+  // 쓰로틀링 추가해주기 !!
+  const updateSearchTerm = (newSearchTerm) => {
+    const body = {
+      skip: 0, // DB에서 처음부터 들고와야 하기 때문에 0
+      limit: Limit,
+      filters: Filters,
+      searchTerm: SearchTerm,
+    }
+
+    setSkip(0)
+    setSearchTerm(newSearchTerm)
+    //getProducts(body)
   }
 
   return (
@@ -132,6 +139,15 @@ function LandingPage() {
       </Row>
 
       {/* 검색 영역 */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          margin: '1rem auto',
+        }}
+      >
+        <SearchFeature refreshFunction={updateSearchTerm} />
+      </div>
 
       {/* gutter는 여백 */}
       <Row gutter={[16, 16]}>{renderCards}</Row>

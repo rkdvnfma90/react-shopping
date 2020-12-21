@@ -48,6 +48,7 @@ router.post('/', (req, res) => {
 router.post('/products', (req, res) => {
   const limit = req.body.limit ? parseInt(req.body.limit) : 20
   const skip = req.body.skip ? parseInt(req.body.skip) : 0
+  const term = req.body.searchTerm
   let findArg = {}
 
   for (let key in req.body.filters) {
@@ -67,17 +68,33 @@ router.post('/products', (req, res) => {
     }
   }
 
-  // product collection에 들어 있는 모든 상품 정보를 가져오기
-  Product.find(findArg)
-    .populate('writer') // 작성자에 대한 모든 정보를 가져올 수 있다.
-    .skip(skip)
-    .limit(limit)
-    .exec((err, productInfo) => {
-      if (err) return res.status(400).json({ success: false, err })
-      return res
-        .status(200)
-        .json({ success: true, productInfo, postSize: productInfo.length })
-    })
+  // 검색 키워드가 있을 경우 (like 검색 구현해보기)
+  if (term) {
+    // product collection에 들어 있는 모든 상품 정보를 가져오기
+    Product.find(findArg)
+      .find({ $text: { $search: term } }) // 검색어
+      .populate('writer') // 작성자에 대한 모든 정보를 가져올 수 있다.
+      .skip(skip)
+      .limit(limit)
+      .exec((err, productInfo) => {
+        if (err) return res.status(400).json({ success: false, err })
+        return res
+          .status(200)
+          .json({ success: true, productInfo, postSize: productInfo.length })
+      })
+  } else {
+    // product collection에 들어 있는 모든 상품 정보를 가져오기
+    Product.find(findArg)
+      .populate('writer') // 작성자에 대한 모든 정보를 가져올 수 있다.
+      .skip(skip)
+      .limit(limit)
+      .exec((err, productInfo) => {
+        if (err) return res.status(400).json({ success: false, err })
+        return res
+          .status(200)
+          .json({ success: true, productInfo, postSize: productInfo.length })
+      })
+  }
 })
 
 module.exports = router
