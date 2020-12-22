@@ -8,6 +8,7 @@ import RegisterPage from './views/RegisterPage/RegisterPage.js'
 import NavBar from './views/NavBar/NavBar'
 import Footer from './views/Footer/Footer'
 import UploadProductPage from './views/UploadProductPage/UploadProductPage'
+import DetailProductPage from './views/DetailProductPage/DetailProductPage'
 
 function App() {
   // Auth(컴포넌트) : Auth hoc로 컴포넌트를 감싼다.
@@ -23,6 +24,11 @@ function App() {
             exact
             path="/product/upload"
             component={Auth(UploadProductPage, true)}
+          />
+          <Route
+            exact
+            path="/product/:productId"
+            component={Auth(DetailProductPage, null)}
           />
         </Switch>
       </div>
