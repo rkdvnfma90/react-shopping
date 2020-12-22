@@ -22,7 +22,8 @@ function RadioBox({ list, handleFilters }) {
 
   return (
     <div>
-      <Collapse defaultActiveKey={['1']}>
+      {/* defaultActiveKey 0으로 하면 기본적으로 닫혀있다. */}
+      <Collapse defaultActiveKey={['0']}>
         <Panel header="Price" key="1">
           {/* Radio.Group의 value와 Radio 의 value 가 일치해야 선택 됨 */}
           <Radio.Group onChange={handleChange} value={Value}>
