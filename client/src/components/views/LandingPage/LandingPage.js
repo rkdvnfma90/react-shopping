@@ -24,12 +24,10 @@ function LandingPage() {
     const body = {
       skip: Skip,
       limit: Limit,
-      searchTerm: SearchTerm,
-      filters: Filters,
     }
 
     getProducts(body)
-  }, [SearchTerm, Filters])
+  }, [])
 
   const getProducts = (body) => {
     axios.post('/api/product/products', body).then((response) => {
@@ -53,6 +51,8 @@ function LandingPage() {
       skip: skip,
       limit: Limit,
       loadMore: true,
+      searchTerm: SearchTerm,
+      filters: Filters,
     }
 
     getProducts(body)
@@ -70,6 +70,18 @@ function LandingPage() {
       </Col>
     )
   })
+
+  const showFilteredResults = (filters) => {
+    const body = {
+      skip: 0,
+      limit: Limit,
+      filters: filters,
+      searchTerm: SearchTerm,
+    }
+
+    getProducts(body)
+    setSkip(0)
+  }
 
   const handlePrice = (value) => {
     const priceData = price
@@ -94,7 +106,8 @@ function LandingPage() {
       newFilters[category] = priceValues
     }
 
-    setSkip(0)
+    //setSkip(0)
+    showFilteredResults(newFilters)
     setFilters(newFilters)
   }
 
@@ -104,12 +117,12 @@ function LandingPage() {
       skip: 0, // DB에서 처음부터 들고와야 하기 때문에 0
       limit: Limit,
       filters: Filters,
-      searchTerm: SearchTerm,
+      searchTerm: newSearchTerm,
     }
 
     setSkip(0)
     setSearchTerm(newSearchTerm)
-    //getProducts(body)
+    getProducts(body)
   }
 
   return (
