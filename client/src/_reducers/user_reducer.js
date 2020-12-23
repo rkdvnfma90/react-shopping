@@ -3,6 +3,7 @@ import {
   REGISTER_USER,
   AUTH_USER,
   LOGOUT_USER,
+  ADD_TO_CART,
 } from '../_actions/types'
 
 // 리듀서에서 리턴된 값이 스토어로 들어감
@@ -18,6 +19,14 @@ export default function (state = {}, action) {
       return { ...state, userData: action.payload }
     case LOGOUT_USER:
       return { ...state }
+    case ADD_TO_CART:
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          cart: action.payload, // userInfo의 cart
+        },
+      }
     default:
       return state
   }
