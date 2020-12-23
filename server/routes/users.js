@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { User } = require('../models/User')
-
+const { Product } = require('../models/Product')
 const { auth } = require('../middleware/auth')
 
 //=================================
@@ -144,6 +144,42 @@ router.post('/addToCart', auth, (req, res) => {
       )
     }
   })
+})
+
+router.get('/removeFromCart', auth, (req, res) => {
+  // 카트 목록에서 지우려고 한 상품을 먼저 지운다. (redux에 있는 cartDetail 정보도 같이 지워야 한다.)
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      // cart에서 id와 일치하는 항목을 삭제한다.
+      $pull: {
+        cart: {
+          id: req.query.id,
+        },
+      },
+    },
+    {
+      new: true,
+    },
+    (err, userInfo) => {
+      const cart = userInfo.cart
+      const array = cart.map((item) => {
+        return item.id
+      })
+
+      Product.find({ _id: { $in: array } })
+        .populate('writer')
+        .exec((err, productInfo) => {
+          // productInfo 와 cart 둘다 보내는 이유는 User collection의 cart 정보가 Product Collection 에는 없기 때문
+          return res.status(200).json({
+            productInfo,
+            cart,
+          })
+        })
+
+      // product collection에서 현재 남아있는 상품들의 정보를 가져오기
+    }
+  )
 })
 
 module.exports = router
