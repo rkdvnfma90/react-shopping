@@ -30,6 +30,7 @@ const userSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
+  // 결제 정보
   history: {
     type: Array,
     default: [],
