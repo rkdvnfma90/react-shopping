@@ -5,8 +5,9 @@ import {
   AUTH_USER,
   LOGOUT_USER,
   ADD_TO_CART,
+  GET_CART_ITEMS,
 } from './types'
-import { USER_SERVER } from '../components/Config.js'
+import { USER_SERVER, PRODUCT_SERVER } from '../components/Config.js'
 
 export function registerUser(dataToSubmit) {
   const request = axios
@@ -67,6 +68,30 @@ export function addTocart(id) {
 
   return {
     type: ADD_TO_CART,
+    payload: request,
+  }
+}
+
+export function getCartItems(cartItems, userCart) {
+  const request = axios
+    .get(`${PRODUCT_SERVER}/products_by_id?id=${cartItems}&type=array`)
+    .then((response) => {
+      // cartitems들에 해당하는 정보들을
+      // Product Collection에서 가져온 후에
+      // Quantity 등의 필요한 정보를 합쳐 준다.
+      userCart.forEach((cartItem) => {
+        response.data.product.forEach((productDetail, index) => {
+          if (cartItem.id === productDetail._id) {
+            // productDetail에 quantity 정보를 넣어준다.(product에는 quantity 정보가 없음)
+            response.data.product[index].quantity = cartItem.quantity
+          }
+        })
+      })
+      return response.data // 리듀서에서 action.payload로 값을 사용할 수 있음
+    })
+
+  return {
+    type: GET_CART_ITEMS,
     payload: request,
   }
 }
