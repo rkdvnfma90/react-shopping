@@ -10,6 +10,7 @@ import Footer from './views/Footer/Footer'
 import UploadProductPage from './views/UploadProductPage/UploadProductPage'
 import DetailProductPage from './views/DetailProductPage/DetailProductPage'
 import CartPage from './views/CartPage/CartPage'
+import HistoryPage from './views/HistoryPage/HistoryPage'
 
 function App() {
   // Auth(컴포넌트) : Auth hoc로 컴포넌트를 감싼다.
@@ -32,6 +33,7 @@ function App() {
             component={Auth(DetailProductPage, null)}
           />
           <Route exact path="/user/cart" component={Auth(CartPage, true)} />
+          <Route exact path="/history" component={Auth(HistoryPage, true)} />
         </Switch>
       </div>
       <Footer />
